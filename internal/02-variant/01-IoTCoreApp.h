@@ -15,6 +15,7 @@
 #include <cloud_server/CloudServerThread.h>
 #include <cloud_server/LogPublisherThread.h>
 #include <device_identity/DeviceTimeSyncThread.h>
+#include <device_identity/IDeviceDiagnostics.h>
 #include "../01-interface/01-IIoTCoreApp.h"
 
 
@@ -22,7 +23,13 @@
 class IoTCoreApp final : public IIoTCoreApp {
 
     /* @Autowired */
+    Private IDeviceDiagnosticsPtr deviceDiagnostics;
+
+    /* @Autowired */
     Private IThreadPoolPtr threadPool;
+
+    /* @Autowired */
+    Private ILoggerPtr logger;
 
     WiFiHealthCheckerThread wifiHealthCheckerThread;
     InternetHealthCheckerThread internetHealthCheckerThread;
@@ -34,6 +41,12 @@ class IoTCoreApp final : public IIoTCoreApp {
     Public ~IoTCoreApp() override = default;
 
     Public Void Start() override {
+        logger->Info(Tag::Untagged, StdString("[ArduinoSpringBootApp] Starting app..."));
+        if (deviceDiagnostics->HadPreviousCrash()) {
+            logger->Info(Tag::Untagged, StdString("[ArduinoSpringBootApp] Previous run: crashed (core dump/panic)."));
+        } else {
+            logger->Info(Tag::Untagged, StdString("[ArduinoSpringBootApp] Previous run: normal."));
+        }
         threadPool->Execute<ResponseHandlerThread>();
         threadPool->Execute<CloudServerThread>();
         threadPool->Execute<LogPublisherThread>();

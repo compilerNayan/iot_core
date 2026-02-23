@@ -6,17 +6,17 @@
 #ifndef IOT_CORE_IOT_CORE_APP_H
 #define IOT_CORE_IOT_CORE_APP_H
 
-#include "../01-interface/01-IIoTCoreApp.h"
+#include <Arduino.h>
 #include <IThreadPool.h>
-#include <IRunnable.h>
+#include <WiFiHealthCheckerThread.h>
+#include <InternetHealthCheckerThread.h>
+#include <local_server/LocalServerThread.h>
 #include <response_handler/ResponseHandlerThread.h>
 #include <cloud_server/CloudServerThread.h>
 #include <cloud_server/LogPublisherThread.h>
 #include <device_identity/DeviceTimeSyncThread.h>
+#include "../01-interface/01-IIoTCoreApp.h"
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#endif
 
 /* @Component */
 class IoTCoreApp final : public IIoTCoreApp {

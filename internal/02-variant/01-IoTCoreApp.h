@@ -34,12 +34,16 @@ class IoTCoreApp final : public IIoTCoreApp {
     WiFiHealthCheckerThread wifiHealthCheckerThread;
     InternetHealthCheckerThread internetHealthCheckerThread;
     LocalServerThread localServerThread;
-    ResponseHandlerThread responseHandlerThread;
 
     Private StdVector<IRunnablePtr> startupThreads;
     Private StdVector<ThreadPoolCore> startupThreadCores;
 
-    Public IoTCoreApp() = default;
+    Public IoTCoreApp() {
+        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System);
+        AddStartupThread<CloudServerThread>(ThreadPoolCore::System);
+        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System);
+        AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System);
+    }
 
     Public ~IoTCoreApp() override = default;
 
@@ -50,10 +54,6 @@ class IoTCoreApp final : public IIoTCoreApp {
         } else {
             logger->Info(Tag::Untagged, StdString("[ArduinoSpringBootApp] Previous run: normal."));
         }
-        threadPool->Execute<ResponseHandlerThread>();
-        threadPool->Execute<CloudServerThread>();
-        threadPool->Execute<LogPublisherThread>();
-        threadPool->Execute<DeviceTimeSyncThread>();
         for (Size i = 0; i < startupThreads.size(); ++i) {
             if (startupThreads[i]) {
                 threadPool->Execute(startupThreads[i], startupThreadCores[i]);

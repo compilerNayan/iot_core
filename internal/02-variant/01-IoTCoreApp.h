@@ -39,7 +39,7 @@ class IoTCoreApp final : public IIoTCoreApp {
     Private StdVector<ThreadPoolCore> startupThreadCores;
 
     Public IoTCoreApp() {
-        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::Application);
+        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System);
         AddStartupThread<CloudServerThread>(ThreadPoolCore::System);
         AddStartupThread<LogPublisherThread>(ThreadPoolCore::System);
         AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System);

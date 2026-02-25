@@ -32,13 +32,13 @@ class IIoTCoreApp {
     /** Register a thread (by type T) to be started when the app starts (Start()). Creates T via default constructor. */
     Public
     template<typename T>
-    Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System) {
+    Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System, Bool heavyDuty = false) {
         static_assert(std::is_base_of_v<IRunnable, T>, "T must derive from IRunnable");
-        AddStartupThreadImpl(std::make_shared<T>(), core);
+        AddStartupThreadImpl(std::make_shared<T>(), core, heavyDuty);
     }
 
-    /** Implement in variant: register the given thread for startup on the specified core. */
-    Protected Virtual Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core) = 0;
+    /** Implement in variant: register the given thread for startup on the specified core with given heavyDuty stack. */
+    Protected Virtual Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, Bool heavyDuty) = 0;
 };
 
 #endif // IOT_CORE_IIOT_CORE_APP_H

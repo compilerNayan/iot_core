@@ -37,15 +37,16 @@ class IoTCoreApp final : public IIoTCoreApp {
 
     Private StdVector<IRunnablePtr> startupThreads;
     Private StdVector<ThreadPoolCore> startupThreadCores;
+    Private StdVector<Bool> startupThreadHeavyDuty;
 
     Public IoTCoreApp() {
-        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System);
-        AddStartupThread<CloudServerThread>(ThreadPoolCore::System);
-        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System);
-        AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System);
-        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System);
-        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System);
-        AddStartupThread<LocalServerThread>(ThreadPoolCore::System);
+        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::Application, true);
+        AddStartupThread<CloudServerThread>(ThreadPoolCore::System, true);
+        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, true);
+        AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System, false);
+        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, false);
+        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System, false);
+        AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
     }
 
     Public ~IoTCoreApp() override = default;
@@ -59,15 +60,16 @@ class IoTCoreApp final : public IIoTCoreApp {
         }
         for (Size i = 0; i < startupThreads.size(); ++i) {
             if (startupThreads[i]) {
-                threadPool->Execute(startupThreads[i], startupThreadCores[i]);
+                threadPool->Execute(startupThreads[i], startupThreadCores[i], startupThreadHeavyDuty[i]);
             }
         }
     }
 
-    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core) override {
+    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, Bool heavyDuty) override {
         if (thread) {
             startupThreads.push_back(thread);
             startupThreadCores.push_back(core);
+            startupThreadHeavyDuty.push_back(heavyDuty);
         }
     }
 

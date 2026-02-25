@@ -30,8 +30,9 @@ class IIoTCoreApp {
     Public Virtual Void Restart() = 0;
 
     /** Register a thread (by type T) to be started when the app starts (Start()). Creates T via default constructor. */
+    Public
     template<typename T>
-    Public Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System) {
+    Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System) {
         static_assert(std::is_base_of_v<IRunnable, T>, "T must derive from IRunnable");
         AddStartupThreadImpl(std::make_shared<T>(), core);
     }

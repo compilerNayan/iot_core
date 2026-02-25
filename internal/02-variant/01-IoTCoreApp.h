@@ -16,6 +16,7 @@
 #include <cloud_server/LogPublisherThread.h>
 #include <device_identity/DeviceTimeSyncThread.h>
 #include <device_identity/IDeviceDiagnostics.h>
+#include <IWiFiConnectionManager.h>
 #include "../01-interface/01-IIoTCoreApp.h"
 
 
@@ -31,6 +32,9 @@ class IoTCoreApp final : public IIoTCoreApp {
     /* @Autowired */
     Private ILoggerPtr logger;
 
+    /* @Autowired */
+    Private IWiFiConnectionManagerPtr wiFiConnectionManager;
+
     WiFiHealthCheckerThread wifiHealthCheckerThread;
     InternetHealthCheckerThread internetHealthCheckerThread;
     LocalServerThread localServerThread;
@@ -42,7 +46,7 @@ class IoTCoreApp final : public IIoTCoreApp {
     Public IoTCoreApp() {
         AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, false);
         //AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
-        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System, false);
+        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, false);
         //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System, false);
         AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::Application, true);
         //AddStartupThread<CloudServerThread>(ThreadPoolCore::System, true);
@@ -57,6 +61,10 @@ class IoTCoreApp final : public IIoTCoreApp {
             logger->Info(Tag::Untagged, StdString("[ArduinoSpringBootApp] Previous run: crashed (core dump/panic)."));
         } else {
             logger->Info(Tag::Untagged, StdString("[ArduinoSpringBootApp] Previous run: normal."));
+        }
+        // Initialize WiFi/LwIP on main thread before spawning tasks (avoids tcpip "Invalid mbox" crash)
+        if (wiFiConnectionManager) {
+            wiFiConnectionManager->ConnectNetwork();
         }
         for (Size i = 0; i < startupThreads.size(); ++i) {
             if (startupThreads[i]) {

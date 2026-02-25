@@ -37,6 +37,7 @@ class IoTCoreApp final : public IIoTCoreApp {
     ResponseHandlerThread responseHandlerThread;
 
     Private StdVector<IRunnablePtr> startupThreads;
+    Private StdVector<ThreadPoolCore> startupThreadCores;
 
     Public IoTCoreApp() = default;
 
@@ -53,16 +54,17 @@ class IoTCoreApp final : public IIoTCoreApp {
         threadPool->Execute<CloudServerThread>();
         threadPool->Execute<LogPublisherThread>();
         threadPool->Execute<DeviceTimeSyncThread>();
-        for (const auto& thread : startupThreads) {
-            if (thread) {
-                threadPool->Execute(thread);
+        for (Size i = 0; i < startupThreads.size(); ++i) {
+            if (startupThreads[i]) {
+                threadPool->Execute(startupThreads[i], startupThreadCores[i]);
             }
         }
     }
 
-    Protected Void AddStartupThreadImpl(IRunnablePtr thread) override {
+    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core) override {
         if (thread) {
             startupThreads.push_back(thread);
+            startupThreadCores.push_back(core);
         }
     }
 

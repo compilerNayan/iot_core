@@ -8,6 +8,7 @@
 
 #include <StandardDefines.h>
 #include <IRunnable.h>
+#include <ThreadPoolCore.h>
 #include <memory>
 #include <type_traits>
 
@@ -30,13 +31,13 @@ class IIoTCoreApp {
 
     /** Register a thread (by type T) to be started when the app starts (Start()). Creates T via default constructor. */
     template<typename T>
-    Public Void AddStartupThread() {
+    Public Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System) {
         static_assert(std::is_base_of_v<IRunnable, T>, "T must derive from IRunnable");
-        AddStartupThreadImpl(std::make_shared<T>());
+        AddStartupThreadImpl(std::make_shared<T>(), core);
     }
 
-    /** Implement in variant: register the given thread for startup. */
-    Protected Virtual Void AddStartupThreadImpl(IRunnablePtr thread) = 0;
+    /** Implement in variant: register the given thread for startup on the specified core. */
+    Protected Virtual Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core) = 0;
 };
 
 #endif // IOT_CORE_IIOT_CORE_APP_H

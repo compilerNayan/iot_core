@@ -43,6 +43,9 @@ class IoTCoreApp final : public IIoTCoreApp {
         AddStartupThread<CloudServerThread>(ThreadPoolCore::System);
         AddStartupThread<LogPublisherThread>(ThreadPoolCore::System);
         AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System);
+        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System);
+        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System);
+        AddStartupThread<LocalServerThread>(ThreadPoolCore::System);
     }
 
     Public ~IoTCoreApp() override = default;
@@ -71,9 +74,6 @@ class IoTCoreApp final : public IIoTCoreApp {
     Public Void Stop() override {}
 
     Public Void Loop() override {
-        wifiHealthCheckerThread.Run();
-        internetHealthCheckerThread.Run();
-        localServerThread.Run();    
     }
 
     Public Void Restart() override {

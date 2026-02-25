@@ -42,7 +42,7 @@ class IoTCoreApp final : public IIoTCoreApp {
     Public IoTCoreApp() {
         AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, false);
         //AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
-        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, false);
+        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System, false);
         //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System, false);
         AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::Application, true);
         //AddStartupThread<CloudServerThread>(ThreadPoolCore::System, true);

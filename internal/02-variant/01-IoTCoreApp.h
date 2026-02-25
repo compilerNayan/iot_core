@@ -35,7 +35,9 @@ class IoTCoreApp final : public IIoTCoreApp {
     InternetHealthCheckerThread internetHealthCheckerThread;
     LocalServerThread localServerThread;
     ResponseHandlerThread responseHandlerThread;
-    
+
+    Private StdVector<IRunnablePtr> startupThreads;
+
     Public IoTCoreApp() = default;
 
     Public ~IoTCoreApp() override = default;
@@ -51,6 +53,17 @@ class IoTCoreApp final : public IIoTCoreApp {
         threadPool->Execute<CloudServerThread>();
         threadPool->Execute<LogPublisherThread>();
         threadPool->Execute<DeviceTimeSyncThread>();
+        for (const auto& thread : startupThreads) {
+            if (thread) {
+                threadPool->Execute(thread);
+            }
+        }
+    }
+
+    Protected Void AddStartupThreadImpl(IRunnablePtr thread) override {
+        if (thread) {
+            startupThreads.push_back(thread);
+        }
     }
 
     Public Void Stop() override {}

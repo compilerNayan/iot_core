@@ -41,12 +41,12 @@ class IoTCoreApp final : public IIoTCoreApp {
 
     Public IoTCoreApp() {
         AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, false);
-        //AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
-        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System, false);
-        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::Application, true);
-        AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System, false);
-        AddStartupThread<CloudServerThread>(ThreadPoolCore::System, true);
-        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, true);
+        AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
+        /*AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::System, false);
+        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::Application, true); */
+        //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::System, false);
+        /* AddStartupThread<CloudServerThread>(ThreadPoolCore::System, true);
+        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, true); */
     }
 
     Public ~IoTCoreApp() override = default;

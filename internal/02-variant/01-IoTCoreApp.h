@@ -8,23 +8,24 @@
 
 #include <WiFiHealthCheckerThread.h>
 
-class IoTCoreApp  {
+/* @Component */
+class IoTCoreApp final : public IIoTCoreApp {
 
 
     Public IoTCoreApp() {
     }
 
-    Public ~IoTCoreApp()  = default;
+    Public ~IoTCoreApp() override = default;
 
-    Public Void Start()  {
+    Public Void Start() override {
     }
 
-    Public Void Stop()  {}
+    Public Void Stop() override {}
 
-    Public Void Loop()  {
+    Public Void Loop() override {
     }
 
-    Public Void Restart()  {
+    Public Void Restart() override {
     }
 
 };

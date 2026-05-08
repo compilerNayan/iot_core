@@ -22,6 +22,22 @@
 /* @Component */
 class IoTCoreApp final : public IIoTCoreApp {
 
+    /* @Autowired */
+    Private IDeviceDiagnosticsPtr deviceDiagnostics;
+
+    /* @Autowired */
+    Private IThreadPoolPtr threadPool;
+
+    /* @Autowired */
+    Private ILoggerPtr logger;
+
+    WiFiHealthCheckerThread wifiHealthCheckerThread;
+    InternetHealthCheckerThread internetHealthCheckerThread;
+    LocalServerThread localServerThread;
+
+    Private StdVector<IRunnablePtr> startupThreads;
+    Private StdVector<ThreadPoolCore> startupThreadCores;
+    Private StdVector<Bool> startupThreadHeavyDuty;
 
     Public IoTCoreApp() {
     }

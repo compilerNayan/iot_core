@@ -9,6 +9,14 @@
 #include <Arduino.h>
 #include <IThreadPool.h>
 #include <WiFiHealthCheckerThread.h>
+#include <InternetHealthCheckerThread.h>
+#include <local_server/LocalServerThread.h>
+#include <response_handler/ResponseHandlerThread.h>
+#include <cloud_server/CloudServerThread.h>
+#include <cloud_server/LogPublisherThread.h>
+#include <device_identity/DeviceTimeSyncThread.h>
+#include <device_identity/IDeviceDiagnostics.h>
+#include "../01-interface/01-IIoTCoreApp.h"
 
 
 /* @Component */

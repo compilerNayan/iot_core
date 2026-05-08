@@ -18,46 +18,4 @@
 #include <device_identity/IDeviceDiagnostics.h>
 #include "../01-interface/01-IIoTCoreApp.h"
 
-
-/* @Component */
-class IoTCoreApp final : public IIoTCoreApp {
-
-    /* @Autowired */
-    Private IDeviceDiagnosticsPtr deviceDiagnostics;
-
-    /* @Autowired */
-    Private IThreadPoolPtr threadPool;
-
-    /* @Autowired */
-    Private ILoggerPtr logger;
-
-    WiFiHealthCheckerThread wifiHealthCheckerThread;
-    InternetHealthCheckerThread internetHealthCheckerThread;
-    LocalServerThread localServerThread;
-
-    Private StdVector<IRunnablePtr> startupThreads;
-    Private StdVector<ThreadPoolCore> startupThreadCores;
-    Private StdVector<Bool> startupThreadHeavyDuty;
-
-    Public IoTCoreApp() {
-    }
-
-    Public ~IoTCoreApp() override = default;
-
-    Public Void Start() override {
-    }
-
-    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, Bool heavyDuty) override {
-    }
-
-    Public Void Stop() override {}
-
-    Public Void Loop() override {
-    }
-
-    Public Void Restart() override {
-    }
-
-};
-
 #endif // IOT_CORE_IOT_CORE_APP_H

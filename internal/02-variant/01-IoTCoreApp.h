@@ -6,7 +6,9 @@
 #ifndef IOT_CORE_IOT_CORE_APP_H
 #define IOT_CORE_IOT_CORE_APP_H
 
-#include <WiFiHealthCheckerThread.h>
+#include <Arduino.h>
+#include <IThreadPool.h>
+
 
 /* @Component */
 class IoTCoreApp final : public IIoTCoreApp {

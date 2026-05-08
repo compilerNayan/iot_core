@@ -8,6 +8,7 @@
 
 #include <Arduino.h>
 #include <IThreadPool.h>
+#include <WiFiHealthCheckerThread.h>
 
 
 /* @Component */

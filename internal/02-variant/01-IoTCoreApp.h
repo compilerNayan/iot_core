@@ -31,9 +31,6 @@ class IoTCoreApp final : public IIoTCoreApp {
     Public Void Start() override {
     }
 
-    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, Bool heavyDuty) override {
-    }
-
     Public Void Stop() override {}
 
     Public Void Loop() override {

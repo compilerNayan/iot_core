@@ -46,7 +46,7 @@ class IoTCoreApp final : public IIoTCoreApp {
         AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System, true); 
         AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::Application, false);
         AddStartupThread<CloudServerThread>(ThreadPoolCore::Application, true);
-        AddStartupThread<LogPublisherThread>(ThreadPoolCore::Application, true);
+        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, true);
     }
 
     Public ~IoTCoreApp() override = default;

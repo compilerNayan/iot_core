@@ -9,6 +9,7 @@
 #include <StandardDefines.h>
 #include <IRunnable.h>
 #include <ThreadPoolCore.h>
+#include <ThreadPoolStackSize.h>
 #include <memory>
 #include <type_traits>
 
@@ -32,13 +33,16 @@ class IIoTCoreApp {
     /** Register a thread (by type T) to be started when the app starts (Start()). Creates T via default constructor. */
     Public
     template<typename T>
-    Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System, Bool heavyDuty = false) {
+    Void AddStartupThread(ThreadPoolCore core = ThreadPoolCore::System,
+                          ThreadPoolStackSize stackSize = ThreadPoolStackSize::KB_8) {
         static_assert(std::is_base_of_v<IRunnable, T>, "T must derive from IRunnable");
-        AddStartupThreadImpl(std::make_shared<T>(), core, heavyDuty);
+        AddStartupThreadImpl(std::make_shared<T>(), core, stackSize);
     }
 
-    /** Implement in variant: register the given thread for startup on the specified core with given heavyDuty stack. */
-    Protected Virtual Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, Bool heavyDuty) = 0;
+    /** Implement in variant: register the thread for startup on the specified core with the requested stack size. */
+    Protected Virtual Void AddStartupThreadImpl(IRunnablePtr thread,
+                                                ThreadPoolCore core,
+                                                ThreadPoolStackSize stackSize) = 0;
 };
 
 #endif // IOT_CORE_IIOT_CORE_APP_H

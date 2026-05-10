@@ -37,16 +37,16 @@ class IoTCoreApp final : public IIoTCoreApp {
 
     Private StdVector<IRunnablePtr> startupThreads;
     Private StdVector<ThreadPoolCore> startupThreadCores;
-    Private StdVector<Bool> startupThreadHeavyDuty;
+    Private StdVector<ThreadPoolStackSize> startupThreadStackSize;
 
     Public IoTCoreApp() {
-        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, false);
-        AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
-        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, false);
-        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System, true); 
-        //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::Application, false);
-        AddStartupThread<CloudServerThread>(ThreadPoolCore::Application, true);
-        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, true);
+        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_8);
+        AddStartupThread<LocalServerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_8);
+        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_8);
+        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_16);
+        //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_8);
+        AddStartupThread<CloudServerThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_16);
+        AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_16);
     }
 
     Public ~IoTCoreApp() override = default;
@@ -60,16 +60,16 @@ class IoTCoreApp final : public IIoTCoreApp {
         }
         for (Size i = 0; i < startupThreads.size(); ++i) {
             if (startupThreads[i]) {
-                threadPool->Execute(startupThreads[i], startupThreadCores[i], startupThreadHeavyDuty[i]);
+                threadPool->Execute(startupThreads[i], startupThreadCores[i], startupThreadStackSize[i]);
             }
         }
     }
 
-    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, Bool heavyDuty) override {
+    Protected Void AddStartupThreadImpl(IRunnablePtr thread, ThreadPoolCore core, ThreadPoolStackSize stackSize) override {
         if (thread) {
             startupThreads.push_back(thread);
             startupThreadCores.push_back(core);
-            startupThreadHeavyDuty.push_back(heavyDuty);
+            startupThreadStackSize.push_back(stackSize);
         }
     }
 

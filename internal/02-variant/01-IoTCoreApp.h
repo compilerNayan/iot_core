@@ -44,7 +44,7 @@ class IoTCoreApp final : public IIoTCoreApp {
         AddStartupThread<LocalServerThread>(ThreadPoolCore::System, false);
         AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, false);
         AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System, true); 
-        AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::Application, false);
+        //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::Application, false);
         AddStartupThread<CloudServerThread>(ThreadPoolCore::Application, true);
         AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, true);
     }

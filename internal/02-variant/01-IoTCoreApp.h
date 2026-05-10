@@ -40,12 +40,12 @@ class IoTCoreApp final : public IIoTCoreApp {
     Private StdVector<ThreadPoolStackSize> startupThreadStackSize;
 
     Public IoTCoreApp() {
-        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_8);
-        AddStartupThread<LocalServerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_8);
-        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_8);
-        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_16);
+        AddStartupThread<WiFiHealthCheckerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_4);
+        AddStartupThread<LocalServerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_4);
+        AddStartupThread<InternetHealthCheckerThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_4);
+        AddStartupThread<ResponseHandlerThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_12);
         //AddStartupThread<DeviceTimeSyncThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_8);
-        AddStartupThread<CloudServerThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_16);
+        AddStartupThread<CloudServerThread>(ThreadPoolCore::Application, ThreadPoolStackSize::KB_12);
         AddStartupThread<LogPublisherThread>(ThreadPoolCore::System, ThreadPoolStackSize::KB_16);
     }
 
